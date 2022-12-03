@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 
 public class Server {
-    private static DecimalFormat df = new DecimalFormat("0.00");
     public static void main(String[] args) throws IOException {
         Generator generator = new Generator();
         ServerSocket ss = new ServerSocket(4999);
@@ -27,12 +26,14 @@ public class Server {
             PrintWriter pr = new PrintWriter(socket.getOutputStream());
             pr.println(generator.getPrice());
             pr.flush();
-            pr.println(generator.getCurrentHour());
-            pr.flush();
             pr.println(generator.getDate());
             pr.flush();
+            pr.println(generator.getCurrentHour());
+            pr.flush();
+            pr.println(generator.getYear());
+            pr.flush();
             try {
-                Thread.sleep(4000);
+                Thread.sleep(6000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

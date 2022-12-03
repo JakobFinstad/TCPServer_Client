@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 
@@ -13,7 +14,7 @@ import java.util.Random;
 public class Generator {
     private double price;
     private static final long SLEEP_DURATION_MS = 4000;
-    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private DecimalFormat decimalFormat = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
     private DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
 
 
@@ -23,8 +24,14 @@ public class Generator {
 
     public String getDate() {
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+        return sdf.format(date);
+    }
+
+    public String getYear(){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         return sdf.format(date);
     }
 
