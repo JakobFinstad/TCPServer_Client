@@ -9,19 +9,31 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) throws IOException {
+        Generator generator = new Generator();
         ServerSocket ss = new ServerSocket(4999);
-        Socket s = ss.accept();
+        Socket socket = ss.accept();
+        Boolean connected = true;
+        while(connected) {
+            System.out.println("Connected");
 
-        System.out.println("Connected");
+            InputStreamReader in = new InputStreamReader(socket.getInputStream());
+            BufferedReader br = new BufferedReader(in);
 
-        InputStreamReader in = new InputStreamReader(s.getInputStream());
-        BufferedReader br = new BufferedReader(in);
+            String str = br.readLine();
+            System.out.println("Client: " + str);
 
-        String str = br.readLine();
-        System.out.println("Client: " + str);
-
-        PrintWriter pr = new PrintWriter(s.getOutputStream());
-        pr.print("Yes");
-        pr.flush();
+            PrintWriter pr = new PrintWriter(socket.getOutputStream());
+            pr.println(generator.getPrice());
+            pr.flush();
+            pr.println(generator.getCurrentHour());
+            pr.flush();
+            pr.println(generator.getDate());
+            pr.flush();
+            try {
+                Thread.sleep(600000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

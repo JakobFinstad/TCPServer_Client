@@ -1,6 +1,7 @@
 package no.ntnu.IDATA2304_Networks;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -13,24 +14,25 @@ public class Generator {
     private double price;
     private static final long SLEEP_DURATION_MS = 4000;
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
 
 
     public Generator() {
         //Left empty on purpose
     }
 
-    public void getDate() {
+    public String getDate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-        System.out.println(sdf.format(date));
+        return sdf.format(date);
     }
 
-    public void getCurrentHour() {
+    public String getCurrentHour() {
         Date currentHour = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
-        System.out.println(sdf.format(currentHour));
+        return sdf.format(currentHour);
     }
 
     /**
@@ -46,9 +48,10 @@ public class Generator {
 
     /**
      * Returns the current price of electricity.
+     *
      * @return The current price of electricity
      */
-    public void getPrice() {
+    public String getPrice() {
         Generator electricityPrice = new Generator();
         Random random = new Random();
         if ((electricityPrice.getCurrentTime() >= 100000) || (electricityPrice.getCurrentTime() <= 140000)) {
@@ -63,7 +66,8 @@ public class Generator {
         else {
             price = 8.88 + random.nextInt(13);
         }
-        System.out.println(decimalFormat.format(price));
+        decimalFormatSymbols.setDecimalSeparator('.');
+        return decimalFormat.format(price);
     }
 
     public void run() throws InterruptedException {
