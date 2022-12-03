@@ -2,6 +2,7 @@ package no.ntnu.IDATA2304_Networks;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.DecimalFormat;
 
 public class Client {
     private String tableName = "tableName";
@@ -17,15 +18,16 @@ public class Client {
             pr.println("Get data plz");
             pr.flush();
 
-            client.sendToDatabase(bf);
-           /** String str = bf.readLine();
+           // client.sendToDatabase(bf); // Kjøre denne
+            //Eller det under
+           String str = bf.readLine();
             System.out.println("Server: " + str + " Øre/kWh");
 
             str = bf.readLine();
             System.out.println("Server: " + str + " o'klokke");
 
             str = bf.readLine();
-            System.out.println(str);**/
+            System.out.println("Server: " + str);
         }
     }
 
@@ -34,5 +36,6 @@ public class Client {
                 ") VALUES(" + bf.readLine() + ",'" + bf.readLine() + "','" + bf.readLine() + "');";
 
         System.out.println(sqlQuery);
+        //Skal sendes til databasen ikke terminal vindu
     }
 }

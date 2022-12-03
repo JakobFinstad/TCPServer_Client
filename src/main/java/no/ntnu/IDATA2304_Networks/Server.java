@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 
 public class Server {
+    private static DecimalFormat df = new DecimalFormat("0.00");
     public static void main(String[] args) throws IOException {
         Generator generator = new Generator();
         ServerSocket ss = new ServerSocket(4999);
@@ -30,7 +32,7 @@ public class Server {
             pr.println(generator.getDate());
             pr.flush();
             try {
-                Thread.sleep(600000);
+                Thread.sleep(4000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
