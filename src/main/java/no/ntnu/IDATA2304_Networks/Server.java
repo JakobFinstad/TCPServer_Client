@@ -6,13 +6,29 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DecimalFormat;
 
+/**
+ * A class for hosting the java server which sends data to a client. Creates a TCP socket so
+ * client can connect to.
+ * @author Group 10
+ * @version  03.12.2022
+ */
 public class Server {
+    private static Generator generator;
+    private static ServerSocket serverSocket;
+    private static Socket socket;
+
+    /**
+     * Main method for initiating the server end.
+     *
+     * @param args
+     * @throws IOException if the system can't sleep
+     */
     public static void main(String[] args) throws IOException {
-        Generator generator = new Generator();
-        ServerSocket ss = new ServerSocket(4999);
-        Socket socket = ss.accept();
+        Server server = new Server();
+        generator = new Generator();
+        serverSocket = new ServerSocket(4999);
+        socket = serverSocket.accept();
         Boolean connected = true;
         while(connected) {
             System.out.println("Connected");
@@ -22,7 +38,23 @@ public class Server {
 
             String str = br.readLine();
             System.out.println("Client: " + str);
+            server.sendData();
 
+            try {
+                Thread.sleep(600000); // 10 minutes sleep between
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        }
+
+    /**
+     * Send data to the receiver socket for further handling.
+     * Crashes if the socket can't send information to the receiver.
+     */
+    private void sendData(){
+        try {
             PrintWriter pr = new PrintWriter(socket.getOutputStream());
             pr.println(generator.getPrice());
             pr.flush();
@@ -32,11 +64,8 @@ public class Server {
             pr.flush();
             pr.println(generator.getYear());
             pr.flush();
-            try {
-                Thread.sleep(6000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        }catch (IOException ioException){
+            System.out.println("Something went wrong, could not send data: "+ioException.getMessage());
+    }
     }
 }
