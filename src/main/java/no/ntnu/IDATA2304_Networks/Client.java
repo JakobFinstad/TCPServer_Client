@@ -11,16 +11,34 @@ import java.text.DecimalFormat;
 
 public class Client {
 
-  private static final String DATABASE_URL = "jdbc:mariadb://mysql690.loopia.se/haslerud_tech";
-  private static final String USERNAME = "group10@h328964";
-  private static final String PASSWORD = "evensivert123";
+    //The url for the database
+    private static final String DATABASE_URL = "jdbc:mariadb://mysql690.loopia.se/haslerud_tech";
+    //Username used to connect to the database
+    private static final String USERNAME = "group10@h328964";
+    //Password used to connect to the database
+    private static final String PASSWORD = "evensivert123";
+    //Request sent to server for connection
+    private static final String REQUEST = "Can I receive data?";
+
   private static Statement st;
 
-  private String tableName = "UserData";
-  private static Connection con;
+    //Name of the table that the data will go into
+    private String tableName = "UserData";
 
-    private String tableAttributes = "kWh,Date,Time,Year"; //Not yet implemented
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+    private static Connection con;
+
+    //The name of the attributes in the table
+    private static final String tableAttributes = "kWh,Date,Time,Year";
+
+  /**
+   * The main method to run the client class.
+   * Establishes a TCP connection with Server to receive information and sends the
+   * information to the database
+   * @param args
+   * @throws IOException in case of buffered reader not able to read line
+   * @throws SQLException if error when connecting to database
+   */
+    public static void main(String[] args) throws IOException, SQLException {
         Client client = new Client();
         Socket socket = new Socket("localhost",4999);
         PrintWriter pr = new PrintWriter(socket.getOutputStream());
@@ -31,19 +49,10 @@ public class Client {
         int timesSendtData = 0;
 
         while(keepGoing) {
-            pr.println("Get data plz");
+            pr.println(REQUEST);
             pr.flush();
 
-            client.sendToDatabase(bf); // Kjøre denne
-            //Eller det under
-           /**String str = bf.readLine();
-            System.out.println("Server: " + str + " Øre/kWh");
-
-            str = bf.readLine();
-            System.out.println("Server: " + str + " o'klokke");
-
-            str = bf.readLine();
-            System.out.println("Server: " + str);*/
+            client.sendToDatabase(bf);
            timesSendtData++;
            if (timesSendtData ==100){
                keepGoing=false;
@@ -53,7 +62,12 @@ public class Client {
         System.out.println("Connection closed.");
     }
 
-    private void sendToDatabase(BufferedReader bf) throws IOException, SQLException{
+    /**
+     * Sends information to the connected database
+     * @param bf
+     * @throws IOException Throws exception in case of buffered reader not able to read line
+     */
+    private void sendToDatabase(BufferedReader bf) throws IOException {
         String sqlQuery = "INSERT INTO " + tableName + "(" + tableAttributes +
                 ") VALUES(" + bf.readLine() + ",'" + bf.readLine() + "','" + bf.readLine() + "','" +
                 bf.readLine()+"');";
@@ -71,6 +85,9 @@ public class Client {
 
     }
 
+    /**
+     * Connect to the database with url, username and password
+     */
     private void connectToDatabase(){
         try {
             con = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
