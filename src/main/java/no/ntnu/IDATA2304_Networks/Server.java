@@ -6,12 +6,24 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DecimalFormat;
 
+/**
+ * A class for hosting the java server which sends data to a client. Creates a TCP socket so
+ * client can connect to.
+ * @author Group 10
+ * @version  03.12.2022
+ */
 public class Server {
     private static Generator generator;
     private static ServerSocket serverSocket;
     private static Socket socket;
+
+    /**
+     * Main method for initiating the server end.
+     *
+     * @param args
+     * @throws IOException if the system can't sleep
+     */
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         generator = new Generator();
@@ -29,13 +41,18 @@ public class Server {
             server.sendData();
 
             try {
-                Thread.sleep(6000);
+                Thread.sleep(600000); // 10 minutes sleep between
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
         }
+
+    /**
+     * Send data to the receiver socket for further handling.
+     * Crashes if the socket can't send information to the receiver.
+     */
     private void sendData(){
         try {
             PrintWriter pr = new PrintWriter(socket.getOutputStream());
